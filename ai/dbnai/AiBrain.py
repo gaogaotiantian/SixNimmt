@@ -4,14 +4,24 @@ class Brain:
         self.cards = []
 
     """
-    Basic Operations:
+    Basic Info Operations:
     """
+    def GetPlayerNum(self, player_info):
+        """
+        Variable Format:
+        - player_info: dictionary, the lenth of the dictionary is the num of players
+        """
+        self.player_num = len(player_info)
+
     def GetRowsInfo(self, rows):
-        self.rows = self.rows + rows
+        self.rows = [] + rows
     
     def GetCardsInfo(self, cards):
-        self.cards = self.cards + cards
-
+        self.cards = [] + cards
+    
+    """
+    Basic Cards Operations:
+    """
     def GetLastCards_Rows(self):
         last_cards = [row[-1] for row in self.rows]
         return last_cards
@@ -151,6 +161,7 @@ class Brain:
                 return self.SelCard('min', '>', short_val)
         else:
             return False
+
     def PickSmallest(self):
         """
         Details:
@@ -201,12 +212,12 @@ class Brain:
                     elif card_pick == None:
                         return self.PickSmallest()
 
-    def ChooseRow(self, rows):
+    def ChooseRow(self):
         """
         Return Type:
         - index 
         """
-        rows_info = [] + rows
+        rows_info = [] + self.rows
         rows_score = [0,0,0,0]
         for i, row in enumerate(rows_info):
             for card in row:
@@ -224,16 +235,20 @@ class Brain:
 
 
 """
-Following code are for debuging:
-"""
-"""
+#Following code are for debuging:
 rowsInfo = [[1,3,89],[5] ,[88,90,91,100,102] ,[55,56,58,59,66]]
 rowsInfo = [[1,3,89],[50] ,[88,90,91,100] ,[55,56,58,59]]
 cardsInfo = [32, 7, 99, 70, 65, 102, 37] 
+
 brain = Brain()
 brain.GetRowsInfo(rowsInfo)
 brain.GetCardsInfo(cardsInfo)
 
+def TestGetPlayerNum():
+    brain.GetPlayerNum({'p1': 0, 'p2':90, 'p3':60})
+    print brain.player_num
+    brain.GetPlayerNum({'p1': 0, 'p2':90, 'p3':60, 'p4':80, 'p5':0} )
+    print brain.player_num
 def TestSelCard():
     brain.cards = [60, 2, 5, 10, 80, 70, 7, 104 ,100]
     card_index = brain.SelCard('max', '<', 10)

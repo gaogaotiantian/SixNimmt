@@ -8,14 +8,9 @@ class AI:
     def __init__(self):
         self.name = ''
         self.cards = []
-        self.rows = []
         self.logFileName = os.path.join(os.path.dirname(__file__), 'log')
+        self.brain = Brain()
         logging.basicConfig(filename = self.logFileName, level=logging.INFO) #For debug 
-    """   
-    def GetDangerRows(self):
-        danRowsIndex = [ i for i, row in enumerate(self.rows) if len(row) == 5 ]
-        return danRowsIndex
-    """
     
     def InfoSetup(self, setupData):
         pass
@@ -23,9 +18,8 @@ class AI:
         self.cards = newGamedata[:]
         pass
     def InfoGame(self, gameData):
-        #logging.info("The gameData" + str(gameData["rows"]))
-        #self.brain.GetRowsInfo(gameData['rows']) 
-        self.rows = gameData['rows']
+        self.brain.GetRowsInfo(gameData['rows'])
+        self.brain.GetPlayerNum(gameData['players'])
         pass
 
     def InfoMove(self, cardData):
@@ -35,10 +29,10 @@ class AI:
     def InfoGameEnd(self, gameEndData):
         pass
     def CmdPickCard(self):
-        random.shuffle(self.cards)
-        brain = Brain()
-        brain.GetRowsInfo(self.rows + [])
-        brain.GetCardsInfo(self.cards + [])
+        #random.shuffle(self.cards)
+        #brain = Brain()
+        #self.brain.GetRowsInfo(self.rows)
+        self.brain.GetCardsInfo(self.cards)
         """
         self.brain.GetCardsInfo(self.cards)
         logging.info("cards " + str(self.cards))
@@ -47,10 +41,12 @@ class AI:
         card_index = self.brain.LargerSecondMin()
         logging.info("Index is PICK--------------- " + str(card_index))
         """
-        return self.cards.pop(brain.AnalyzeCardChoice())
+        return self.cards.pop(self.brain.AnalyzeCardChoice())
         
     def CmdPickRow(self):
-        return Brain().ChooseRow(self.rows) 
+        #return random.randint(0,3)
+        return self.brain.ChooseRow()
+
     def ProcessInfo(self):
         line = sys.stdin.readline()
         if line == '':
